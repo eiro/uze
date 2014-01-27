@@ -20,6 +20,7 @@
 
 function () {
     local m=$1
+    shift
 
     $m/search () { lynx/getdump "http://annuaire.unistra.fr/chercher" "$@" }
 
@@ -32,5 +33,4 @@ function () {
     local f
     for f (cards emails)
         eval "$m/$f () { $m/search "'"$@"'" | $m/filter/$f }"
-
-} unistra/annuaire
+} ${0#uze/} "$@"
