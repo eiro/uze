@@ -1,0 +1,33 @@
+# it ... 
+
+# * is kinda poor man's xargs? zargs ?   
+# * needs a better name (related to std or filter)
+
+# anyway, it ..
+
+# * append a command at the end of each lines
+# * pipes to zsh 
+
+# as example, if a file 'urls' contains
+# http://foo.bar    > file1 
+# http://foo.bang  >> file1
+# http://bar.bar    > file2 
+# http://bar.bang  >> file2 
+
+#   pipe/to curl -ksL < urls 
+# will create file1 and file2 
+
+# this is very usefull from inside vim 
+
+# BONUS: 
+
+# tired to `:.!pipe/to foo`? 
+# then try in your .zshenv:
+# pipe/alias F foo 
+
+# and in vim: `:.!F `
+
+warn "pipe/* are EXPERIMENTAL"
+pipe/to () { sed "s#^#$* #" | zsh  } 
+pipe/alias () { eval "$1 () { 's#^#$2 #' | zsh }" }  
+
