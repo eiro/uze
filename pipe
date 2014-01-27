@@ -27,7 +27,6 @@
 
 # and in vim: `:.!F `
 
-warn "pipe/* are EXPERIMENTAL"
+# warn "pipe/* are EXPERIMENTAL"
 pipe/to () { sed "s#^#$* #" | zsh  } 
 pipe/alias () { eval "$1 () { 's#^#$2 #' | zsh }" }  
-
