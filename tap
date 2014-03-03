@@ -1,0 +1,49 @@
+# TODO: https://github.com/chneukirchen/knock!
+# # BASICS:
+# ok true
+# ok "so true" true
+# ok false
+# ok "so wrong" false
+# got=true  expect=true  is "agreed on truth"
+# got=false expect=false is "agreed liards"
+# got=true expect=false is "disagreed"
+# done_testing
+# 
+# ok 0 - 0 true
+# ok 1 - 0 so true
+# not ok 2 - 1 false (1)
+# not ok 3 - 1 so wrong (1)
+# ok 4 - 0 agreed on truth
+# ok 5 - 0 agreed liards
+# not ok 6 - 1 disagreed (1)
+# 1..7
+
+plan () {
+    typeset -g TAP_TEST
+    TAP_TEST=0
+}
+
+done_testing () {
+    print "1..$TAP_TEST"
+    TAP_TEST=0
+}
+
+tap/report () {
+   (( $+TAP_TEST )) || plan
+    local TAP_STATUS=$1
+    (( TAP_STATUS )) &&
+        print "not ok $[TAP_TEST++] - $* ($TAP_STATUS)" ||
+        print "ok $[TAP_TEST++] - $*" 
+}
+
+ok() {
+   local ___desc="$1"
+   (( $+argv[2] )) && shift
+   eval "$*" 2>&1 >/dev/null | sed 's/^/# /'
+   tap/report $pipestatus[1] $___desc
+}
+
+is () {
+    [[ "$got" == "$expect" ]]
+    tap/report $? "$@"
+}
