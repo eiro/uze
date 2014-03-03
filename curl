@@ -1,0 +1,7 @@
+. uze/it
+
+curl/poke () { shush curl -fs --connect-timeout 1 ${1:-${REPLY:?no parameter supplied}} }
+curl/say/poke () {
+    local url="${1:-${REPLY?:-no parameter supplied}}"
+    print "$( does_it curl/poke $url ) $url"
+}
