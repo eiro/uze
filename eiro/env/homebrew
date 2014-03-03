@@ -1,0 +1,66 @@
+# vim: ft=zsh sw=4 fdm=marker path+=~/bin
+# setting env for various programs
+
+is_installed () {
+    local e
+    for e { shush which $e || return }
+}
+
+new_place () {
+    local var=$1 dir=${2:-${REPLY:?where is this place $1 ?}}
+    # don't overide existing variable
+    eval '(( $+'$var' ))' && return
+    # don't update env if there is no dir
+    [[ -d $dir ]] || return
+    eval "export $var=${(qqq)dir}"
+    [[ -d $dir/bin ]] && path=( $dir/bin $path ) 
+    true
+}
+
+is_installed java && {
+    export -UT CLASSPATH classpath
+    classpath=(
+        ~/local/java/bin(N)
+        ~/local/java/jar(N)
+    )
+} 
+
+# this should be a separate file
+
+: /etc/profile.d/clojure.sh('Ne:source $REPLY:') # arch linux, for example
+new_place GOPATH        ~/local/opt/go
+new_place GROOVY_HOME   ~/local/opt/groovy-1.8.6
+new_place GEM_HOME      ~/local/lib/gems
+: ~/local/opt/clojurescript(Ne:'
+    new_place CLOJURESCRIPT_HOME && classpath=(
+        $REPLY/clojure.jar(N))
+':)
+
+path=(
+    ~/local/opt/vim/bin(N)
+    ~/bin(/N)
+    ~/.cabal/bin(N)
+    ~/.rvm/bin(N)
+    ~/local/vendor/bin(/N)
+    /usr/local/bin(/N)
+    ~/src/got/bin(N)
+    $path
+)
+
+function () {
+    [[ -e $1 ]] &&
+        eval "ditaa () { java -jar $1"' "$@" }'
+} ~/local/opt/ditaa/ditaa0_9.jar 
+
+# perl6 {{{ 
+
+hash -d p6=~/src/perl/6/lib
+export -UT PERL6LIB perl6lib
+path+=( ~/local/opt/rakudo/current/install/bin(N) ) 
+p6_reload_lib () {
+    perl6lib=( lib ~p6/*/lib(N) $perl6lib )
+    path=( ~p6/*/{bin,script{,s}}(N) $path )
+}
+p6_reload_lib 
+
+# }}}

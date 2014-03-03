@@ -1,0 +1,9 @@
+export PS1="[%T] %n@%M%b:%d
+> "
+
+git_whatsup () {
+    local up="$(shush2 git log -1 --format='%d')"
+    [[ -n $up ]] && print "$up + $( shush2 git status -s |wc -l ) modifs"
+}
+
+precmd () { export PS1="[%T] %n@%M%b:%~ |$(git_whatsup )"$'\n'"> " }
