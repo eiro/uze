@@ -3,10 +3,8 @@ textile    () { perl -MText::Textile=textile -0 -e 'print textile <>' }
 html_prove () { prove -m -Q --formatter=TAP::Formatter::HTML "$@" }
 y2js       () { perl -MYAML -MJSON -0 -e "print(encode_json(YAML::Load(<>)))" }
 js2y       () { perl -MYAML -MJSON -0 -e "print(YAML::Dump(decode_json(<>)))" } 
-ssh_fp () {
-    local host=$1 port=$2
-    lsof -i:$port &> /dev/null || ssh -fNL ${port}:localhost:${port} $host
-} 
+
+
 rediff () { local f=$1; shift; vimdiff scp://$^@/$f $f  }
 podish () { perldoc -o html "$@"  > ~/www/pod.html }
 ff () { find "$@" -type f } 
@@ -14,6 +12,16 @@ ff () { find "$@" -type f }
 alias cc='gcc -pedantic -Wall -Werror -std=c99'
 alias l='ls'
 alias g=git
-alias nslatex='latex -interaction=nonstopmode' 
+alias nslatex='latex -interaction=nonstopmode'
 
+ssh/fp () {
+    local host=${1:?forwarder host} port=${2:?port to forward} target=${3:-localhost}
+    lsof -i:$port &> /dev/null ||
+        ssh -fNL ${port}:$target:${port} $host
+}
 
+getent/service/port () {
+    echo ${${"$(
+        getent services ${1:?service spec (examples: ldaps ldaps/tcp 636/tcp)} 
+    )"##* }%/*}
+}
