@@ -1,0 +1,83 @@
+# example of configuration (from .zshenv) 
+
+# typeset -A SYMPARC
+# SYMPARC=(
+# 	root      ~/expl
+# 	pl        /usr/lib/sympa/bin/sympa.pl
+# 	etc       /etc/sympa
+# 	bot       example.com
+# 	botglob   '*.(com|org|fr|net)'
+# )
+# . uze/sympa
+
+sympa/bot/ls () {
+    (cd $SYMPARC[root] &&
+	print -l $~SYMPARC[botglob](e:'
+	    test -d $REPLY -a ! -e $REPLY/config
+	':))
+}
+
+# better ? 
+# SYMPA_MATCHES_BOTS="/etc/sympa/*.(eu|fr)(/:t)"
+# ls_bots () { print -l $~SYMPA_MATCHES_BOTS }
+
+sympa/list/path () {
+    IFS=@ read list bot <<< ${1:?name of the list}
+    print $SYMPARC[root]/$bot/$list
+}
+
+sympa/bot/cd      () { cd $SYMPARC[bot]/$1 }
+sympa/list/cd     () { cd $(sympa/list/path $1) }
+sympa/list/config () { print $(sympa/list/path $1)/config } 
+
+sympa/list/mv () {
+    local new robot
+    IFS=@ read new robot <<< ${2:?usage: mv old new}  
+    : ${robot:=$SYMPARC[bot]}
+
+    local old=$1
+    [[ $old == *@* ]] || old=$old@$SYMPARC[bot]
+
+    $SYMPARC[pl] \
+	--rename_list=$old      \
+	--new_listname=$new     \
+	--new_listrobot=$robot
+}
+
+sympa/list/close () {
+    local list=${1:?addr of the list to close} 
+    [[ $list == *@* ]] || old=$list@$SYMPARC[bot]
+    $SYMPARC[pl] --close_list=$list
+}
+
+sympa/subscribers/dump/cat () {
+    sympa/subscribers/dump/prepare $1
+    local p=$( sympa/subscribers/dump/path $1 ) && cat $p
+}
+
+sympa/subscribers/dump/path () {
+	: ${1:?the name of the list is expected as argument}
+	local user domain
+	IFS=@ read user domain <<< "$1"
+	echo ~/expl/${domain:-$SYMPARC[bot]}/$user/subscribers.db.dump
+} 
+
+sympa/subscribers/dump/prepare/now () {
+    # typical usage is: cat $( sympa/subscribers/dump/prepare/now staff )
+    local list=${1:?the name of the list is expected as argument}
+    [[ $list == *@* ]] || list=$list@$SYMPARC[bot]
+    sympa --dump=$list
+    sympa/subscribers/dump/path $list
+}
+
+sympa/subscribers/dump/prepare/when () {
+    # typical usage is: cat $( sympa/subscribers/dump/prepare staff@example.com )
+    local list=${1:?the name of the list is expected as argument} 
+    shift
+    local p=$( sympa/subscribers/dump/path $list )
+    find $p "$@" && sympa --dump=$list
+    $p
+}
+
+sympa/subscribers/dump/filter/count  () { grep -c '^e' "$@" }
+sympa/subscribers/dump/filter/emails () { sed -n 's/^email //p' "$@" }
