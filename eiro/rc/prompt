@@ -1,9 +1,19 @@
 export PS1="[%T] %n@%M%b:%d
 > "
 
-git_whatsup () {
+precmd/git () {
     local up="$(shush2 git log -1 --format='%d')"
     [[ -n $up ]] && print "$up + $( shush2 git status -s |wc -l ) modifs"
 }
 
-precmd () { export PS1="[%T] %n@%M%b:%~ |$(git_whatsup )"$'\n'"> " }
+# precmd/n2 is available on some of my machines to provide a
+# count of available tickets from a ITIL N2 of our local bug tracker
+
+precmd () {
+    export PS1="[%T] %n@%M%b:%~ |$(
+        precmd/git
+    )$(  
+        is_installed precmd/n2 &&
+            shush2 precmd/n2 
+    )"$'\n'"> " 
+}
