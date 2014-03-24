@@ -1,14 +1,22 @@
 # example of configuration (from .zshenv) 
 
 # typeset -A SYMPARC
-# SYMPARC=(
-# 	root      ~/expl
-# 	pl        /usr/lib/sympa/bin/sympa.pl
-# 	etc       /etc/sympa
-# 	bot       example.com
-# 	botglob   '*.(com|org|fr|net)'
-# )
 # . uze/sympa
+# SYMPARC=(
+#    arc_path $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf ) 
+#    queueoutgoing $( sympa/rc/get queueoutgoing /etc/sympa/sympa.conf ) 
+#    arc_path  $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf ) 
+#    root      ~/expl
+#    pl        /usr/lib/sympa/bin/sympa.pl
+#    etc       /etc/sympa
+#    bot       example.com
+#    botglob   '*.(com|org|fr|net)'
+# )
+
+sympa/rc/get () {
+    local key=${1:?key in the file} file=${2:?file to seek the key}
+    sed -n "s/^$key\s*//;T;p;q" $file
+}
 
 sympa/bot/ls () {
     (cd $SYMPARC[root] &&
