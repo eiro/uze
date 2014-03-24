@@ -1,5 +1,4 @@
-# example of configuration (from .zshenv) 
-
+# example of configuration (from .zshenv): 
 # typeset -A SYMPARC
 # . uze/sympa
 # SYMPARC=(
@@ -13,9 +12,32 @@
 #    botglob   '*.(com|org|fr|net)'
 # )
 
+# get a single key stored in a single line in a sympa config file 
+# example:
+# sympa/rc/get queueoutgoing /etc/sympa/sympa.conf 
 sympa/rc/get () {
     local key=${1:?key in the file} file=${2:?file to seek the key}
     sed -n "s/^$key\s*//;T;p;q" $file
+}
+
+# dump the SYMPARC structure a readable, evaluable way 
+sympa/rc/dump () {
+    local k v
+    for k v ( ${(kv)SYMPARC} ) print "$k $v"
+}
+
+# ask archived to remove or rebuild a list given its address
+# sympa/archived remove old-list
+# sympa/archived remove old-list@exemple.com
+
+sympa/archived () {
+    locale cmd=$1 addr=$2
+    [[ $cmd == re(build|move) ]] || {
+	warn "$cmd isn't a valid command"
+	return
+    }
+    [[ $addr == *@* ]] || addr=$addr@$SYMPARC[bot]
+    touch $SYMPARC[queueoutgoing]/.$cmd.$addr
 }
 
 sympa/bot/ls () {
