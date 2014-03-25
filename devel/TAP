@@ -1,3 +1,11 @@
+# stuff_to_be_sure () {
+#     [[ a == a ]]; ok string equality
+#     [[ z == 1 ]]; ok string equality
+#     shush  cat /nawak; ok cat nawak
+#     shush cat /etc/passwd; ok cat nawak
+# }
+# devel/TAP/prove stuff_to_be_sure
+
 devel/TAP/prove () {
     local _test_tap_index=0
     $1
