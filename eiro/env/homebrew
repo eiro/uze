@@ -1,10 +1,34 @@
 # vim: ft=zsh sw=4 fdm=marker path+=~/bin
 # setting env for various programs
 
+
+# are the commands passed as argument ready to use ? 
+# return false instead
+# usage: is_installed java fill osiris/wifi
 is_installed () {
     local e
-    for e { shush which $e || return }
+    for e { shush which -w $e || return }
 }
+
+# update classpath if java and stuff are on the machine 
+is_installed java && {
+    export -UT CLASSPATH classpath
+    classpath=(
+        ~/local/java/bin(N)
+        ~/local/java/jar(N)
+    )
+} 
+
+
+# when you compile tools by yourself (or just untar a ball somewhere)
+# it is common to export a root variable and update the path 
+# with the bin subdir (if it exists). new_place does it for you. 
+#
+# warnings:
+#
+# * it *unshift* the path to overload system provided binaries
+# * it don't override existing variables
+# * it does nothing if the declared path doesn't exist
 
 new_place () {
     local var=$1 dir=${2:-${REPLY:?where is this place $1 ?}}
@@ -17,17 +41,7 @@ new_place () {
     true
 }
 
-is_installed java && {
-    export -UT CLASSPATH classpath
-    classpath=(
-        ~/local/java/bin(N)
-        ~/local/java/jar(N)
-    )
-} 
-
-# this should be a separate file
-
-: /etc/profile.d/clojure.sh('Ne:source $REPLY:') # arch linux, for example
+# some potential new places 
 new_place GOPATH        ~/local/opt/go
 new_place GROOVY_HOME   ~/local/opt/groovy-1.8.6
 new_place GEM_HOME      ~/local/lib/gems
@@ -36,6 +50,11 @@ new_place GEM_HOME      ~/local/lib/gems
         $REPLY/clojure.jar(N))
 ':)
 
+# if present, loads the clojure profile (as provided by arch for example)  
+: /etc/profile.d/clojure.sh('Ne:source $REPLY:') 
+
+# this should be a separate file
+# self explained ? 
 path=(
     ~/local/opt/vim/bin(N)
     ~/bin(/N)
@@ -47,6 +66,7 @@ path=(
     $path
 )
 
+# create a ditaa command if the jar is presen 
 function () {
     [[ -e $1 ]] &&
         eval "ditaa () { java -jar $1"' "$@" }'
