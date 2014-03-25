@@ -1,0 +1,15 @@
+# to be more tested (work-for-me (tm))
+
+# example: uze/import devel/TAP ok diag prove
+uze/import () {
+    local ns=$1 f
+    shift
+    for f { alias $f=$ns/$f }
+
+}
+
+
+uze/use () {
+    . uze/$1
+    uze/import "$@"
+}
