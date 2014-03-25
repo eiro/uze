@@ -62,14 +62,27 @@ sympa/bot/ls () {
 # SYMPA_MATCHES_BOTS="/etc/sympa/*.(eu|fr)(/:t)"
 # ls_bots () { print -l $~SYMPA_MATCHES_BOTS }
 
+# give the path of the list directory
+# (whatever form you provide in entry) 
+# examples: 
+# cdl () { cd $(sympa/list/path $1) }
+# vil () { vim $(sympa/list/path $1)/config }
+# those are the same (asuming example.com is the default bot) 
+# cdl managers
+# cdl managers@example.com
+# cdl example.com/managers
+
 sympa/list/path () {
-    IFS=@ read list bot <<< ${1:?name of the list}
-    print $SYMPARC[root]/$bot/$list
+    IFS=@ read list bot <<< ${1:?spec of the list}
+    [[ -n $bot ]] && print $SYMPARC[root]/$bot/$list || {
+	[[ $list == */* ]] &&
+	    print $SYMPARC[root]/$list ||
+	    print $SYMPARC[root]/${SYMPARC[bot]}/$list
+    }
 }
 
 sympa/bot/cd      () { cd $SYMPARC[bot]/$1 }
-sympa/list/cd     () { cd $(sympa/list/path $1) }
-sympa/list/config () { print $(sympa/list/path $1)/config } 
+
 
 sympa/list/mv () {
     local new robot
