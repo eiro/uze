@@ -1,0 +1,15 @@
+devel/TAP/prove () {
+    local _test_tap_index=0
+    $1
+    print 1..$_test_tap_index
+}
+
+devel/TAP/ok () {
+    local r=$?
+    local verdict
+    (( r )) && verdict="no ok" || verdict="ok"
+    print "$verdict $[++_test_tap_index] - ${*:-}"
+}
+
+devel/TAP/diag () { print "# $*" }
+
