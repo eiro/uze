@@ -6,7 +6,7 @@
 #    queueoutgoing $( sympa/rc/get queueoutgoing /etc/sympa/sympa.conf ) 
 #    arc_path  $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf ) 
 #    root      ~/expl
-#    pl        /usr/lib/sympa/bin/sympa.pl
+#    script    /usr/lib/sympa/bin/sympa.pl
 #    etc       /etc/sympa
 #    bot       example.com
 #    botglob   '*.(com|org|fr|net)'
@@ -92,7 +92,7 @@ sympa/list/mv () {
     local old=$1
     [[ $old == *@* ]] || old=$old@$SYMPARC[bot]
 
-    $SYMPARC[pl] \
+    $SYMPARC[script] \
 	--rename_list=$old      \
 	--new_listname=$new     \
 	--new_listrobot=$robot
@@ -101,7 +101,7 @@ sympa/list/mv () {
 sympa/list/close () {
     local list=${1:?addr of the list to close} 
     [[ $list == *@* ]] || old=$list@$SYMPARC[bot]
-    $SYMPARC[pl] --close_list=$list
+    $SYMPARC[script] --close_list=$list
 }
 
 sympa/subscribers/dump/cat () {
