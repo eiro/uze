@@ -9,7 +9,6 @@
 #    script    /usr/lib/sympa/bin/sympa.pl
 #    etc       /etc/sympa
 #    bot       example.com
-#    botglob   '*.(com|org|fr|net)'
 # )
 
 # get a single key stored in a single line in a sympa config file 
@@ -51,12 +50,7 @@ sympa/archived () {
 
 sympa/arc/txt/ls () { find $SYMPARC[arc_path]/${1:?address of the list}/*/arctxt/ -type f }
 
-sympa/bot/ls () {
-    (cd $SYMPARC[root] &&
-	print -l $~SYMPARC[botglob](e:'
-	    test -d $REPLY -a ! -e $REPLY/config
-	':))
-}
+sympa/bot/ls () { (cd $SYMPARC[etc] && print -l */robot.conf(:h)) }
 
 # better ? 
 # SYMPA_MATCHES_BOTS="/etc/sympa/*.(eu|fr)(/:t)"
