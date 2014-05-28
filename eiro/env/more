@@ -10,7 +10,7 @@ podish () { perldoc -o html "$@"  > ~/www/pod.html }
 ff () { find "$@" -type f } 
 
 alias cc='gcc -pedantic -Wall -Werror -std=c99'
-alias l='ls'
+alias l='ls -d'
 alias g=git
 alias nslatex='latex -interaction=nonstopmode'
 
