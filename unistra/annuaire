@@ -22,13 +22,18 @@ function () {
     local m=$1
     shift
 
-    $m/search () { lynx/getdump "http://annuaire.unistra.fr/chercher" "$@" }
+    $m/search () { lynx/dump "http://annuaire.unistra.fr/chercher" "$@" }
 
     $m/filter/cards () {
         perl -lnE 'print if m{ ^\[\d\][^&]+ $ }x ...  m{ ^\s*$ }x'
     }
 
-    $m/filter/emails () { sed -nr '/@/ { s/.*]//p }' }
+    $m/filter/emails () { 
+        sed -nr '
+            /Informations complémentaires/ {q}
+            /@/ { s/.*]//p }
+        ' 
+    }
 
     local f
     for f (cards emails)
