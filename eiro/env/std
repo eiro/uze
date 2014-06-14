@@ -3,10 +3,8 @@
 shush1   () { "$@" 1> /dev/null }
 shush2   () { "$@" 2> /dev/null }
 shush    () { "$@" &> /dev/null }
-warn     () { print -u2 "$*"; false }
-fail     () { warn "fail is DEPRECATED; use warn instead. Anyway: the message was $*" }
-confess  () { local r=$?; warn "$*"; return $r }
-die      () { local r=$?; warn "$*"; exit $r   }
+warn     () { local r=$?; print -u2 "$*"; return $r }
+die      () { local r=$?; print -u2 "$*"; exit $r   }
 slurp    () { IFS=$'\n' read -d '' -A $1 }
 fill     () { local garbage; IFS=$'\n' read -d '' "$@" garbage }
 
