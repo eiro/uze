@@ -1,34 +1,82 @@
-# example of configuration (from .zshenv) 
-
+# example of configuration (from .zshenv): 
 # typeset -A SYMPARC
-# SYMPARC=(
-# 	root      ~/expl
-# 	pl        /usr/lib/sympa/bin/sympa.pl
-# 	etc       /etc/sympa
-# 	bot       example.com
-# 	botglob   '*.(com|org|fr|net)'
-# )
 # . uze/sympa
+# SYMPARC=(
+#    arc_path $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf ) 
+#    queueoutgoing $( sympa/rc/get queueoutgoing /etc/sympa/sympa.conf ) 
+#    arc_path  $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf ) 
+#    root      ~/expl
+#    script    /usr/lib/sympa/bin/sympa.pl
+#    etc       /etc/sympa
+#    bot       example.com
+# )
 
-sympa/bot/ls () {
-    (cd $SYMPARC[root] &&
-	print -l $~SYMPARC[botglob](e:'
-	    test -d $REPLY -a ! -e $REPLY/config
-	':))
+# get a single key stored in a single line in a sympa config file 
+# example:
+# sympa/rc/get queueoutgoing /etc/sympa/sympa.conf 
+sympa/rc/get () {
+    local key=${1:?key in the file} file=${2:?file to seek the key}
+    sed -n "s/^$key\s*//;T;p;q" $file
 }
+
+# dump the SYMPARC structure a readable, evaluable way sympa/rc/dump () {
+sympa/rc/dump () {
+    local k v
+    for k v ( ${(kv)SYMPARC} ) print "$k $v"
+}
+
+# ask archived to remove or rebuild a list given its address
+# sympa/archived remove old-list
+# sympa/archived remove old-list@exemple.com
+
+sympa/archived () {
+    local cmd=$1 addr=$2
+    [[ $cmd == re(build|move) ]] || {
+	warn "$cmd isn't a valid command"
+	return
+    }
+    [[ $addr == *@* ]] || addr=$addr@$SYMPARC[bot]
+    touch $SYMPARC[queueoutgoing]/.$cmd.$addr
+}
+
+# list all text files from an archive
+# example:
+#    sympa/arc/txt/ls list@example.com | while {read file} {
+#	local enc=$( file --mime-encoding $file )
+#	[[ $enc == *utf-8 ]] || {
+# 	    recode $enc..utf-8 $f
+# 	    sed -i "s#charset=$enc#charset=utf-8#g" $source
+# 	}
+
+sympa/arc/txt/ls () { find $SYMPARC[arc_path]/${1:?address of the list}/*/arctxt/ -type f }
+
+sympa/bot/ls () { (cd $SYMPARC[etc] && print -l */robot.conf(:h)) }
 
 # better ? 
 # SYMPA_MATCHES_BOTS="/etc/sympa/*.(eu|fr)(/:t)"
 # ls_bots () { print -l $~SYMPA_MATCHES_BOTS }
 
+# give the path of the list directory
+# (whatever form you provide in entry) 
+# examples: 
+# cdl () { cd $(sympa/list/path $1) }
+# vil () { vim $(sympa/list/path $1)/config }
+# those are the same (asuming example.com is the default bot) 
+# cdl managers
+# cdl managers@example.com
+# cdl example.com/managers
+
 sympa/list/path () {
-    IFS=@ read list bot <<< ${1:?name of the list}
-    print $SYMPARC[root]/$bot/$list
+    IFS=@ read list bot <<< ${1:?spec of the list}
+    [[ -n $bot ]] && print $SYMPARC[root]/$bot/$list || {
+	[[ $list == */* ]] &&
+	    print $SYMPARC[root]/$list ||
+	    print $SYMPARC[root]/${SYMPARC[bot]}/$list
+    }
 }
 
 sympa/bot/cd      () { cd $SYMPARC[bot]/$1 }
-sympa/list/cd     () { cd $(sympa/list/path $1) }
-sympa/list/config () { print $(sympa/list/path $1)/config } 
+
 
 sympa/list/mv () {
     local new robot
@@ -38,7 +86,7 @@ sympa/list/mv () {
     local old=$1
     [[ $old == *@* ]] || old=$old@$SYMPARC[bot]
 
-    $SYMPARC[pl] \
+    $SYMPARC[script] \
 	--rename_list=$old      \
 	--new_listname=$new     \
 	--new_listrobot=$robot
@@ -47,7 +95,7 @@ sympa/list/mv () {
 sympa/list/close () {
     local list=${1:?addr of the list to close} 
     [[ $list == *@* ]] || old=$list@$SYMPARC[bot]
-    $SYMPARC[pl] --close_list=$list
+    $SYMPARC[script] --close_list=$list
 }
 
 sympa/subscribers/dump/cat () {
