@@ -4,7 +4,6 @@ html_prove () { prove -m -Q --formatter=TAP::Formatter::HTML "$@" }
 y2js       () { perl -MYAML -MJSON -0 -e "print(encode_json(YAML::Load(<>)))" }
 js2y       () { perl -MYAML -MJSON -0 -e "print(YAML::Dump(decode_json(<>)))" } 
 
-
 rediff () { local f=$1; shift; vimdiff scp://$^@/$f $f  }
 podish () { perldoc -o html "$@"  > ~/www/pod.html }
 ff () { find "$@" -type f } 
@@ -12,7 +11,12 @@ ff () { find "$@" -type f }
 alias cc='gcc -pedantic -Wall -Werror -std=c99'
 alias l='ls -d'
 alias g=git
-alias nslatex='latex -interaction=nonstopmode'
+alias nslatex='latex -interaction=nonstopmode' 
+
+
+alias s=ssh
+sz ()  { s $1 zsh  }
+sm ()  { s $argv[1] mysql "${(@)argv[2,-1]}" }
 
 ssh/fp () {
     local host=${1:?forwarder host} port=${2:?port to forward} target=${3:-localhost}
