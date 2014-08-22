@@ -28,6 +28,14 @@ done_testing () {
     TAP_TEST=0
 }
 
+tap/suite () {
+    typeset -g TAP_TEST
+    TAP_TEST=0
+    "$@"
+    print "1..$TAP_TEST"
+    TAP_TEST=0
+}
+
 tap/report () {
    (( $+TAP_TEST )) || plan
     local TAP_STATUS=$1
@@ -47,3 +55,5 @@ is () {
     [[ "$got" == "$expect" ]]
     tap/report $? "$@"
 }
+
+
