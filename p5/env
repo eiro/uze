@@ -20,7 +20,7 @@
 # et voilà! libs as well as commands are available
 
 export -UT PERL5LIB perl5lib
-export PERL_LOCAL_LIB_ROOT
+export PERL_LOCAL_LIB_ROOT PERL_MB_OPT PERL_MM_OPT
 
 p5/env/dev () {
     perl5lib=( lib ~p5/*/lib(N) $perl5lib )
