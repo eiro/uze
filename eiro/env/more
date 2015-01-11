@@ -15,7 +15,7 @@ alias nslatex='latex -interaction=nonstopmode'
 
 
 alias s=ssh
-sz ()  { s $1 zsh  }
+sz ()  { s "$@" zsh  }
 sm ()  { s $argv[1] mysql "${(@)argv[2,-1]}" }
 
 ssh/fp () {
