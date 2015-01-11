@@ -20,8 +20,7 @@ sm ()  { s $argv[1] mysql "${(@)argv[2,-1]}" }
 
 ssh/fp () {
     local host=${1:?forwarder host} port=${2:?port to forward} target=${3:-localhost}
-    lsof -i:$port &> /dev/null ||
-        ssh -fNL ${port}:$target:${port} $host
+    shush2 lsof -i:$port || ssh -fNL ${port}:$target:${port} $host
 }
 
 getent/service/port () {
