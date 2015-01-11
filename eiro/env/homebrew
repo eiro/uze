@@ -34,7 +34,7 @@ new_place () {
     eval '(( $+'$var' ))' && return
     # don't update env if there is no dir
     [[ -d $dir ]] || return
-    eval "export $var=${(qqq)dir}"
+    eval "export $var=${(qq)dir}"
     [[ -d $dir/bin ]] && path=( $dir/bin $path ) 
     true
 }
