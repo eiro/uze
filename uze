@@ -1,15 +1,117 @@
-# to be more tested (work-for-me (tm))
+: <<=cut
 
-# example: uze/import devel/TAP ok diag prove
+=head1 uze
+
+uze is my attempt to organize my zsh environment into libraries that can be
+shared and loaded when needed.
+
+=head2 uze is just a convention
+
+zsh can source any file from the C<$path>. so when you write 
+
+    . mylib
+
+zsh will find C<mylib> whereever in the C<$path>. in addition, you can setopt
+C<pathdirs> to permit zsh to use commands and source files in subdirs so you
+can now write
+
+    . company/std
+
+if there is a directory in your C<$path> that contains a subdirectory C<company>
+with a C<std> in it.
+
+as example, if C<~/bin> is in your C<$path>, you can store your functions into 
+C<~/bin/company/std> then source them by typing
+
+    . company/std
+
+=head2 (my own) uze
+
+my C<uze> file does some setopt that add warnings when missusing variable
+
+    setopt warncreateglobal nounset
+
+it also activate extended globs and brace expansions
+
+    setopt extendedglob braceccl
+
+then it loads some functions that i use so commonly they became first class
+citizem of my scripting
+
+=head3 shush, shush1, shush2
+
+shush redirect all content of stderr and stdout to /dev/null so you can run
+command silently.
+
+but sometime you need something to show: shush1 remove only stdout while shush2
+removes only stderr. 
+
+=head3 warn
+
+warn prints a message in stderr without changing the last command return (C<$?>). 
+
+=head die
+
+die warns and exit. 
+
+=head fill
+
+read multiple lines into a list of variables 
+
+    date +"%Y\n%m" | fill year month
+    echo $year
+
+=head slurp
+
+read multiple lines in an array
+
+    getent passwd | slurp users
+    print "entry of root is" $users[1]
+
+=head uze/import
+
+as uze emphasis the usage of namespaces in your functions, it would be
+convenient to have aliases without namespaces. import is an helper on that. 
+
+    uze/import my/long/ns foo bar bang
+
+is a shortcut for
+
+    alias foo=my/long/ns/foo
+    alias bar=my/long/ns/bar
+    alias bang=my/long/ns/bang 
+
+=head1 TODO
+
+    more documentation
+    more tests
+    remove one of TAP and devel/TAP 
+
+=cut
+
+# to be more tested (work-for-me (tm))
+# example: uze/import devel/TAP ok diag prove 
+
+setopt warncreateglobal nounset
+setopt extendedglob braceccl
+
+# TODO: document
+shush1   () { "$@" 1> /dev/null }
+shush2   () { "$@" 2> /dev/null }
+shush    () { "$@" &> /dev/null }
+warn     () { local r=$?; print -u2 "$*"; return $r }
+die      () { local r=$?; print -u2 "$*"; exit $r   }
+slurp    () { IFS=$'\n' read -d '' -A $1 }
+fill     () { local garbage; IFS=$'\n' read -d '' "$@" garbage }
+
+uze () {
+    . $1
+    uze/import "$@"
+} 
+
 uze/import () {
     local ns=$1 f
     shift
     for f { alias $f=$ns/$f }
 
-}
-
-
-uze/use () {
-    . uze/$1
-    uze/import "$@"
 }
