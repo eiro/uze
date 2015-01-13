@@ -9,7 +9,11 @@ mir/sed     () {
     perl -MMARC::MIR -w -0x1d -nE '
         sub r { $_ = from_iso2709 } # read
         sub h { for_humans }        # human
-    '$1 $argv[2,-1] }
+    '$1 $argv[2,-1]
+}
+
+mir/dump () { mir/sed "say h r" "$@" }
+
 
 # examples:
 
