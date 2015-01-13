@@ -1,0 +1,15 @@
+# debian local repo 
+hash -d debrepo=$HOME/local/debs
+dpkg-scanpackages/gz () { dpkg-scanpackages $@ | gzip -c9 }
+
+repo/update () {
+    pushd ~debrepo
+    dpkg-scanpackages/gz . > Packages.gz
+    popd
+}
+
+repo/add () {
+    mv $@ ~debrepo && repo_update
+}
+
+
