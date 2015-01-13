@@ -1,23 +1,70 @@
-# stuff_to_be_sure () {
-#     [[ a == a ]]; ok string equality
-#     [[ z == 1 ]]; ok string equality
-#     shush  cat /nawak; ok cat nawak
-#     shush cat /etc/passwd; ok cat nawak
-# }
-# devel/TAP/prove stuff_to_be_sure
+: <<'=cut'
+
+=head1 Usage
+
+* write your test suite in a function (using |&: to not ruin the report)
+* devel/TAP/prove this test suite
+
+=head1 Example
+
+see the output at the end of the section
+
+    . uze/devel/TAP
+
+    # alias
+    for REPLY (note ok prove)
+        alias $REPLY=devel/TAP/$REPLY
+
+    test_multios () { 
+
+        note "create temporary files" 
+
+        local a b
+        a=`mktemp` b=`mktemp` 
+
+        [[ -f $a ]]; ok "mktemp a worked fine"
+        [[ -f $b ]]; ok "mktemp b worked fine"
+
+        note "the actual use of multios redirection"
+        echo foo > $a > $b  
+
+        cmp $a $b; ok "files are the same"  
+        
+        note "removing temp files"
+        rm $a $b |&:
+    }
+
+    prove test_multios
+
+if setopt is activated, you'll see
+
+    # create temporary files
+    ok 1 - mktemp a worked fine
+    ok 2 - mktemp b worked fine
+    # the actual use of multios redirection
+    ok 3 - files are the same
+    # removing temp files
+    1..3
+
+=cut
 
 devel/TAP/prove () {
     local _test_tap_index=0
-    $1
+    "$@"
     print 1..$_test_tap_index
 }
 
 devel/TAP/ok () {
-    local r=$?
-    local verdict
-    (( r )) && verdict="no ok" || verdict="ok"
-    print "$verdict $[++_test_tap_index] - ${*:-}"
+    if (( !$? )) {
+        print "ok $[++_test_tap_index] - $1"
+    } else {
+        print "not ok $[++_test_tap_index] - $1"
+    }
 }
 
-devel/TAP/diag () { print "# $*" }
+devel/TAP/note () {
+    local r=$?
+    print "# $*"
+    return $r
+}
 
