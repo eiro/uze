@@ -5,3 +5,11 @@ curl/say/poke () {
     local url="${1:-${REPLY?:-no parameter supplied}}"
     print "$( does_it curl/poke $url ) $url"
 }
+
+curl/tarx () {
+    setopt localoptions xtrace
+    local tarball=$1
+    shift
+    tar x "$@" $tarball
+}
+
