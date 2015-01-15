@@ -71,3 +71,4 @@ devel/TAP/note () {
     return $r
 }
 
+devel/TAP/com () { sed 's/^/# /' }
