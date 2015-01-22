@@ -84,9 +84,8 @@ slurp    () { IFS=$'\n' read -d '' -A $1 }
 fill     () { local garbage; IFS=$'\n' read -d '' "$@" garbage } 
 
 # TODO: doesn't work as expected for the moment 
-
-for REPLY (note ok prove)
-    alias $REPLY=devel/TAP/$REPLY
+# for REPLY (note ok prove)
+#     alias $REPLY=devel/TAP/$REPLY
 
 # =head uze/import 
 #
