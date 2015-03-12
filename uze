@@ -68,6 +68,23 @@ read multiple lines in an array
     getent passwd | slurp users
     print "entry of root is" $users[1]
 
+=head3 uzu $ns $symbols[@]
+
+asuming you have a file named C<foo/bar> or C<uze/foo/bar>
+somewhere in your C<$path>
+
+    uzu foo/bar tic tac
+
+will 
+
+    . foo/bar
+    alias tic=foo/bar/tic
+    alias tac=foo/bar/tac
+
+Note there is nothing like the perl C<Exporter> equivalent but this would be
+possible. i just have to figure out a good way to do it.
+
+
 =cut
 
 setopt warncreateglobal nounset
@@ -82,4 +99,24 @@ die      () { local r=$?; print -u2 "$*"; exit $r   }
 slurp    () { IFS=$'\n' read -d '' -A $1 }
 fill     () { local garbage; IFS=$'\n' read -d '' "$@" garbage }
 
+uzu () {
+
+    # uzu_ns   : the actual module name
+    # uzu_can  : the modules found in $path
+    # uzu_does : symbols of the modules to be imported
+
+    local uzu_ns=$1 uzu_does
+
+    typeset -a uzu_can
+    uzu_can=( ${^path}/{,uze/}$1(N) )
+
+    ((#uzu_can)) || {
+        warn "can't find $uzu_ns in \$path"
+        return
+    }
+
+    . $uzu_can[1]
+    for uzu_does { alias $uzu_does=$uzu_ns/$uzu_does }
+
+} 
 
