@@ -74,3 +74,17 @@ devel/TAP/note () {
 devel/TAP/com () { sed 's/^/# /' }
 
 devel/TAP/is () { [[ "$1" == "$2" ]]; devel/TAP/ok "$3" }
+
+uzu/devel/TAP () {
+    for uzu_tag {
+        case $uzu_tag {
+            (:all) UZU_EXPORT+=( ok prove is note ) ;;
+            (ok|prove|is|note) UZU_EXPORT+=( $uzu_tag ) ;;
+            (*)  warn "invalid tag $uzu_tag while uzu $@"
+                false
+                return
+            ;;
+        }
+    }
+    true
+}
