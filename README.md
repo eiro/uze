@@ -1,4 +1,6 @@
-# uze zsh (the way you use dynamic langages)
+# uze zsh (the way you use the other dynamic langages)
+
+## motivations
 
 what you miss the most when coming from a dynamic langage to zsh is the
 ecosystem: some conventions and tools to share, document and test your code.
@@ -13,7 +15,22 @@ However, zsh builtins comes with the hability to
 - embed documentation
 - generate TAP
 
-we just need tools and conventions to make this ecosystem lives.
+we just need tools and conventions to make this ecosystem lives. 
+
+## examples
+
+well ... this repo is full of examples but you can see the
+[devel/TAP](https://github.com/eiro/uze/blob/master/devel/TAP) module because
+
+- it's a good example of how i write things for the moment
+- testing is something you probably miss when you come from perl :) 
+
+
+if you want to see a test suite,
+please have a look on the one i started to write to
+[test my env](https://github.com/eiro/rcfiles/blob/master/env_test.zsh) to be
+ready to use. 
+
 
 # Notes (for slides?)
 
