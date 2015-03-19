@@ -17,7 +17,6 @@ awk/new () {
     local name=$1 sep=${(q)2} params='"$@"'
     shift 2
     typeset -a fields vars
-    awk/cols fields "$@"
     vars=( -v$^fields )
     eval "$name () { awk -F$sep $vars $params }"
 } 
