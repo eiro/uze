@@ -1,20 +1,25 @@
-# http://annaire.unistra.fr/chercher
-# is a form to query the University of Strasbourg Yellow Page
-# this uze provide wrappers and filters on it 
+: << '=cut'
 
-# unistra/annuaire/search lynx dumps a result of a search
+=head1 query http://annaire.unistra.fr/chercher
 
-# parameters are 
-# p: firstname (prenom)
-# n: lastname  (name)
-# s: structure name 
+is a form to query the University of Strasbourg Yellow Page
+this uze provide wrappers and filters on it 
 
-# in most cases, you don't want the whole page, so we have helpers and filters:
-# unistra/annuaire/cards for complete informations about found people
-# unistra/annuaire/emails for just emails 
+unistra/annuaire/search lynx dumps a result of a search
 
-# as example, you can find me with
-# unistra/annuaire/cards p marc m chant
+    parameters are 
+    p: firstname (prenom)
+    n: lastname  (name)
+    s: structure name 
+
+in most cases, you don't want the whole page, so we have helpers and filters:
+unistra/annuaire/cards for complete informations about found people
+unistra/annuaire/emails for just emails 
+
+as example, you can find me with
+unistra/annuaire/cards p marc m chant
+
+=cut
 
 . uze/lynx
 
