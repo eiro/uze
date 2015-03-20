@@ -1,0 +1,24 @@
+uzu devel/TAP :all 
+uzu awk
+uzu ldap
+lf=ldap/filter
+
+suite () {
+    local got expected
+
+    awk/new lol go to hell -- -F'[\\\\ ]'
+
+    got=$( lol '{ print $to }' <<< 'go to\hell' )
+    is $got to "awk/new works"
+
+    got=$( $lf/minify <<< "
+        (| (uid=a)
+           (uid=b))" )
+
+    expected="(|(uid=a)(uid=b))"
+    is $got $expected "ldap minification works" ||
+        note "got $got"
+
+}
+
+prove suite

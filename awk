@@ -7,17 +7,22 @@
 wraps awk with named fields
 
     . uze/awk
-    awk/new apwd : login pwd uid gid gecos home shell 
+    awk/new apwd login pwd uid gid gecos home shell -- -F: 
     getent passwd | apwd '$login == "root" { print $shell }'
 
 
 =cut
 
 awk/new () {
-    local name=$1 sep=${(q)2} params='"$@"'
-    shift 2
-    typeset -a fields vars
-    vars=( -v$^fields )
-    eval "$name () { awk -F$sep $vars $params }"
+    typeset -a fields extra
+    local name=$1
+    shift
+    local bound=$argv[(I)--] 
+    if (( bound )) {
+        fields=( $argv[1,bound-1] ); extra=( $argv[bound+1,#argv] )
+    } else { fields=( $argv ); extra=() }
+    local i
+    for i ( {1-$#fields} ) fields[i]=-v$fields[i]=$i
+    eval "$name () { awk $fields ${(q)extra} \$@ }"
 } 
 
