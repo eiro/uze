@@ -22,7 +22,15 @@ prepare
 =cut
 
 ldap/filter/minify () {
-    perl -MNet::LDAP::Filter -0 -lnE '
+    perl -MNet::LDAP::Filter -0 -nE '
+    
+        s/  (?(DEFINE)
+            (?<ws_or_eol> [\v\h]+))
+
+            ^ (?&ws_or_eol)
+            | (?&ws_or_eol) $
+        //xmsg;
+
         say Net::LDAP::Filter 
         -> new( $_ )
         -> as_string
