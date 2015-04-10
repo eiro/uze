@@ -59,3 +59,4 @@ rt/tk/active () {
     ' "$@"
 }
 
+rt/-query () { m4 rtquery - <<< "$*" }
