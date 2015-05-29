@@ -84,13 +84,27 @@ will
 Note there is nothing like the perl C<Exporter> equivalent but this would be
 possible. i just have to figure out a good way to do it.
 
+=head1 FATPACKING
+
+if you don't want to deploy scripts via distribution tarballs or git
+repositories, you can fatpack (this is an idea stolen
+from L<App::Fatpacker|https://metacpan.org/pod/App::FatPacker>) modules in a
+large self-contained files. 
+
+Fatpacking local files using C<cat>: 
+
+    cat uze devel/TAP openssl mir > ~/.zshenv
+
+Fatpacking distant files using C<curl>:
+
+    for lib ( uze devel/TAP openssl mir ) { 
+        curl -sL https://raw.githubusercontent.com/eiro/uze/master/$lib
+    } > ~/.zshenv
 
 =cut
 
-setopt warncreateglobal nounset
-setopt extendedglob braceccl
+setopt warncreateglobal nounset extendedglob braceccl pathdirs
 
-# TODO: document
 shush1   () { "$@" 1> /dev/null }
 shush2   () { "$@" 2> /dev/null }
 shush    () { "$@" &> /dev/null }
