@@ -93,13 +93,23 @@ large self-contained files.
 
 Fatpacking local files using C<cat>: 
 
-    cat uze devel/TAP openssl mir > ~/.zshenv
+    cd path/to/my/uze
+    cat uze devel/TAP openssl mir > fatpacked.zshenv
 
 Fatpacking distant files using C<curl>:
 
     for lib ( uze devel/TAP openssl mir ) { 
         curl -sL https://raw.githubusercontent.com/eiro/uze/master/$lib
-    } > ~/.zshenv
+    } > fatpacked.zshenv
+
+or 
+
+    xargs -n1 curl -sL <<LIBs > fatpacked.zshenv
+    https://raw.githubusercontent.com/eiro/uze/master/uze
+    https://raw.githubusercontent.com/eiro/uze/master/devel/TAP
+    https://raw.githubusercontent.com/eiro/uze/master/openssl
+    https://raw.githubusercontent.com/eiro/uze/master/mir
+    LIBs
 
 =cut
 
