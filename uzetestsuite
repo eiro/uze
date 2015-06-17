@@ -1,9 +1,9 @@
 uzu devel/TAP :all 
 uzu awk
 uzu ldap
+uzu sympa
 
-got= expected=
-lf=ldap/filter
+got= expected= m=
 
 test/awk () {
     awk/new lol go to hell -- -F'[\\\\ ]'
@@ -12,7 +12,8 @@ test/awk () {
 }
 
 test/ldap/filter () {
-    got=$( $lf/minify <<< "
+    m=ldap/filter
+    got=$( $m/minify <<< "
         (| (uid=a)
            (uid=b))" )
     expected="(|(uid=a)(uid=b))"
@@ -20,9 +21,30 @@ test/ldap/filter () {
         note "got $got"
 }
 
+test/sympa/list () {
+
+    eval $(sympa/lb/let di-tous-request@unistra.fr )
+
+    note "lb/let from the email addr di-tous-request@unistra.fr"
+    test $list = di-tous    ; ok "lb/let set \$list to '$list'"
+    test $bot  = unistra.fr ; ok "lb/let set \$bot to '$bot'"
+
+    note "lb from the path foo/bar"
+    sympa/lb foo/bar
+    test $list = bar ; ok "lb set \$list to $list"
+    test $bot  = foo ; ok "lb set \$bot to $bot"
+
+    note "lb from the bareword bar"
+    sympa/lb bar
+    test $list = bar ; ok "lb set \$list to $list"
+    test -z bot      ; ok "bot is unset"
+
+}
+
 suite () {
     test/awk 
     test/ldap/filter
+    test/sympa/list 
 }
 
 prove suite

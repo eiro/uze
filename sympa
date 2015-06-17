@@ -66,8 +66,19 @@ sympa/bot/ls () { (cd $SYMPARC[etc] && print -l */robot.conf(:h)) }
 # cdl managers@example.com
 # cdl example.com/managers
 
+sympa/lb () {
+    if   [[ $1 == */* ]] { IFS=/ read bot list <<< $1 } \
+    elif [[ $1 == *@* ]] {
+        IFS=@ read list bot <<< $1
+        list=${list%-(request|editor|owner)}
+    } \
+    else { list=$1 }
+}
+
+sympa/lb/let () { print "local list bot; sympa/lb $1" }
+
 sympa/list/path () {
-    IFS=@ read list bot <<< ${1:?spec of the list}
+    eval $(sympa/lb/let ${1:?list name missing})
     [[ -n $bot ]] && print $SYMPARC[root]/$bot/$list || {
 	[[ $list == */* ]] &&
 	    print $SYMPARC[root]/$list ||
