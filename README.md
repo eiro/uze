@@ -31,6 +31,26 @@ please have a look on the one i started to write to
 [test my env](https://github.com/eiro/rcfiles/blob/master/env_test.zsh) to be
 ready to use. 
 
+# Documentation
+
+you can use `perldoc` to read the command of any `uze` module, eg.
+
+    perldoc ~/bin/uze/uze
+
+an online documentation (poor rendering for the moment) is available on [my
+github page](http://eiro.github.com/uze/index.html). it is generated using
+this script:
+
+    cat <( print "# uze documentation\n\n" )\
+        uze \
+        <( print "# uze\n\n" )\
+        **/*~uze~*.md(.)|
+            pod2markdown|
+            sed ' s#^\\\*#*#
+                  s,^#,##,
+                ' |
+            tee /tmp/podmds |
+            pandoc --template=bootstrap > ~/www/e/uze/index.html
 
 # Notes (for slides?)
 

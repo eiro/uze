@@ -5,6 +5,9 @@
 uze is my attempt to organize my zsh environment into libraries that can be
 shared and loaded when needed.
 
+sources for the project are available on
+L<my github|https://github.com/eiro/uze>.
+
 =head2 uze is just a convention
 
 zsh can source any file from the C<$path>. so when you write 
