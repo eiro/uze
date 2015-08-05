@@ -10,13 +10,39 @@ is_installed () {
     for e { shush which -w $e || return }
 }
 
-# update classpath if java and stuff are on the machine 
-is_installed java && {
-    export -UT CLASSPATH classpath
-    local j;
-    # append a joker to the dir makes java find all the jars in the directory
-    for j ( ~/local/jar(N) ) classpath+=$j/\* 
-} 
+# * does anyone know how to make CLASSPATH work for real ?
+#   i tried all kind of classpath like 
+#
+#     * ~/local/jar/*jar
+#     * ~/local/jar/\*
+#     * ~/local/jar/ 
+#
+#   none of them seems to work.
+#
+# also: time to use nailgun: 
+# http://www.martiansoftware.com/nailgun/quickstart.html
+
+() {
+    is_installed java || return
+    local cmd jar
+    for cmd jar (
+        plantuml plantuml.jar
+        ditaa    ditaa0_9.zip 
+        ) { eval $cmd' () { java -jar '$HOME'/local/jar/'$jar' "$@" }' }
+
+    # && {
+    #     # export -UT CLASSPATH classpath
+    #     # local -a j;
+    #     # j=( ~/local/jar(N) )
+    #     # classpath+=( $^j/\* )
+    # } 
+
+}
+
+
+
+
+
 
 # when you compile tools by yourself (or just untar a ball somewhere)
 # it is common to export a root variable and update the path 
@@ -43,9 +69,11 @@ new_place () {
 new_place GOPATH        ~/local/opt/go
 new_place GROOVY_HOME   ~/local/opt/groovy-1.8.6
 new_place GEM_HOME      ~/local/lib/gems
+
 : ~/local/opt/clojurescript(Ne:'
-    new_place CLOJURESCRIPT_HOME && classpath=(
-        $REPLY/clojure.jar(N))
+    new_place CLOJURESCRIPT_HOME && classpath+=(
+        $REPLY/clojure.jar(N)
+    )
 ':)
 
 # if present, loads the clojure profile (as provided by arch for example)  
