@@ -79,7 +79,7 @@ sympa/lb/let () { print "local list bot; sympa/lb $1" }
 
 sympa/list/tarball () {
     local list bot
-    sympa/lb $2
+    sympa/lb $1
     local addr=$list@${bot:=$SYMPARC[bot]}
 
     ( set -e
@@ -88,8 +88,7 @@ sympa/list/tarball () {
         tar cz $list
 
         cd $SYMPARC[arc_path]
-        tar cz $addr
-
+        [[ -e $addr ]] && tar cz $addr
     )
 }
 
