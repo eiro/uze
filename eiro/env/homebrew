@@ -68,7 +68,10 @@ new_place () {
 # some potential new places 
 new_place GOPATH        ~/local/opt/go
 new_place GROOVY_HOME   ~/local/opt/groovy-1.8.6
-new_place GEM_HOME      ~/local/lib/gems
+new_place GRAILS_HOME   ~/local/opt/grails-3.0.4
+new_place GEM_HOME      ~/local/lib/gems 
+new_place PINTO_HOME    ~/local/opt/pinto
+
 
 : ~/local/opt/clojurescript(Ne:'
     new_place CLOJURESCRIPT_HOME && classpath+=(
