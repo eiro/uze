@@ -22,8 +22,11 @@ alias nslatex='latex -interaction=nonstopmode'
 
 
 alias s=ssh
-sz ()  { s "$@" zsh  }
-sm ()  { s $argv[1] mysql "${(@)argv[2,-1]}" }
+sz  ()  { s "$@" zsh  }
+sm  ()  { s $argv[1] mysql "${(@)argv[2,-1]}" }
+sp  ()  { s "$@" zsh &>> ${PROMOUT:-/tmp/promise.mix} & }
+p   ()  { z "$@" &>> ${PROMOUT:-/tmp/promise.mix} & }
+tp  ()  { tail  "$@" ${PROMOUT:-/tmp/promise.mix} }
 
 ssh/fp () {
     local host=${1:?forwarder host} port=${2:?port to forward} target=${3:-localhost}
