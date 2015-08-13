@@ -1,19 +1,19 @@
-# example of configuration (from .zshenv): 
+# example of configuration (from .zshenv):
 # typeset -A SYMPARC
 # . uze/sympa
 # SYMPARC=(
-#    arc_path $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf ) 
-#    queueoutgoing $( sympa/rc/get queueoutgoing /etc/sympa/sympa.conf ) 
-#    arc_path  $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf ) 
+#    arc_path $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf )
+#    queueoutgoing $( sympa/rc/get queueoutgoing /etc/sympa/sympa.conf )
+#    arc_path  $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf )
 #    root      ~/expl
 #    script    /usr/lib/sympa/bin/sympa.pl
 #    etc       /etc/sympa
 #    bot       example.com
 # )
 
-# get a single key stored in a single line in a sympa config file 
+# get a single key stored in a single line in a sympa config file
 # example:
-# sympa/rc/get queueoutgoing /etc/sympa/sympa.conf 
+# sympa/rc/get queueoutgoing /etc/sympa/sympa.conf
 sympa/rc/get () {
     local key=${1:?key in the file} file=${2:?file to seek the key}
     sed -n "s/^$key\s*//;T;p;q" $file
@@ -52,16 +52,16 @@ sympa/arc/txt/ls () { find $SYMPARC[arc_path]/${1:?address of the list}/*/arctxt
 
 sympa/bot/ls () { (cd $SYMPARC[etc] && print -l */robot.conf(:h)) }
 
-# better ? 
+# better ?
 # SYMPA_MATCHES_BOTS="/etc/sympa/*.(eu|fr)(/:t)"
 # ls_bots () { print -l $~SYMPA_MATCHES_BOTS }
 
 # give the path of the list directory
-# (whatever form you provide in entry) 
-# examples: 
+# (whatever form you provide in entry)
+# examples:
 # cdl () { cd $(sympa/list/path $1) }
 # vil () { vim $(sympa/list/path $1)/config }
-# those are the same (asuming example.com is the default bot) 
+# those are the same (asuming example.com is the default bot)
 # cdl managers
 # cdl managers@example.com
 # cdl example.com/managers
@@ -77,6 +77,22 @@ sympa/lb () {
 
 sympa/lb/let () { print "local list bot; sympa/lb $1" }
 
+sympa/list/tarball () {
+    local list bot
+    sympa/lb $2
+    local addr=$list@${bot:=$SYMPARC[bot]}
+
+    ( set -e
+
+        cd $SYMPARC[root]/$bot
+        tar cz $list
+
+        cd $SYMPARC[arc_path]
+        tar cz $addr
+
+    )
+}
+
 sympa/list/path () {
     eval $(sympa/lb/let ${1:?list name missing})
     [[ -n $bot ]] && print $SYMPARC[root]/$bot/$list || {
@@ -91,7 +107,7 @@ sympa/bot/cd      () { cd $SYMPARC[bot]/$1 }
 
 sympa/list/mv () {
     local new robot
-    IFS=@ read new robot <<< ${2:?usage: mv old new}  
+    IFS=@ read new robot <<< ${2:?usage: mv old new}
     : ${robot:=$SYMPARC[bot]}
 
     local old=$1
@@ -104,7 +120,7 @@ sympa/list/mv () {
 }
 
 sympa/list/close () {
-    local list=${1:?addr of the list to close} 
+    local list=${1:?addr of the list to close}
     [[ $list == *@* ]] || old=$list@$SYMPARC[bot]
     $SYMPARC[script] --close_list=$list
 }
@@ -119,7 +135,7 @@ sympa/subscribers/dump/path () {
 	local user domain
 	IFS=@ read user domain <<< "$1"
 	echo ~/expl/${domain:-$SYMPARC[bot]}/$user/subscribers.db.dump
-} 
+}
 
 sympa/subscribers/dump/prepare/now () {
     # typical usage is: cat $( sympa/subscribers/dump/prepare/now staff )
@@ -131,7 +147,7 @@ sympa/subscribers/dump/prepare/now () {
 
 sympa/subscribers/dump/prepare/when () {
     # typical usage is: cat $( sympa/subscribers/dump/prepare staff@example.com )
-    local list=${1:?the name of the list is expected as argument} 
+    local list=${1:?the name of the list is expected as argument}
     shift
     local p=$( sympa/subscribers/dump/path $list )
     find $p "$@" && sympa --dump=$list
