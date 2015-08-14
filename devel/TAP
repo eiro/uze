@@ -49,9 +49,16 @@ if setopt is activated, you'll see
 =cut
 
 devel/TAP/prove () {
+    typeset -A with
+    while [[ $argv[1] = :* ]] { with+=( $argv[1,2] ); shift 2 }
+
+    (( ${+with[:plan]} )) && print 1..$with[:plan]
+
     local _test_tap_index=0
     "$@"
-    print 1..$_test_tap_index
+
+    (( ${+with[:plan]} )) || print 1..$_test_tap_index
+
 }
 
 devel/TAP/ok () {
