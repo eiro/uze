@@ -80,7 +80,7 @@ devel/TAP/note () {
 
 devel/TAP/com () { sed 's/^/# /' }
 
-devel/TAP/is () { [[ "$1" == "$2" ]]; devel/TAP/ok "$3" }
+devel/TAP/is () { [[ "$2" == "$3" ]]; devel/TAP/ok "$1" }
 
 uzu/devel/TAP () {
     for uzu_tag {
