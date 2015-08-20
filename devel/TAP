@@ -64,9 +64,9 @@ devel/TAP/prove () {
 devel/TAP/ok () {
     local _tap_test_r=$?
     if (( !_tap_test_r )) {
-        print "ok $[++_test_tap_index] - $1"
+        print "ok $[++_test_tap_index] $1"
     } else {
-        print "not ok $[++_test_tap_index] - $1"
+        print "not ok $[++_test_tap_index] $1"
     }
     return $_tap_test_r
 
