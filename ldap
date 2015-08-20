@@ -34,5 +34,5 @@ ldap/filter/minify () {
         say Net::LDAP::Filter 
         -> new( $_ )
         -> as_string
-    '
+    ' "$@"
 } 
