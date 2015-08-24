@@ -5,23 +5,25 @@ uzu sympa
 
 got= expected= m=
 
-test/awk () {
+prove/awk () {
     awk/new lol go to hell -- -F'[\\\\ ]'
     got=$( lol '{ print $to }' <<< 'go to\hell' )
-    is $got to "awk/new works"
+    is $got to \
+    "awk/new working"
 }
 
-test/ldap/filter () {
+prove/ldap/filter () {
     m=ldap/filter
     got=$( $m/minify <<< "
         (| (uid=a)
            (uid=b))" )
     expected="(|(uid=a)(uid=b))"
-    is $got $expected "ldap minification works" ||
-        note "got $got"
+    is "$got" "$expected"       \
+    "ldap minification working" ||
+        note "ldap/filter $got"
 }
 
-test/sympa/list () {
+prove/sympa () {
 
     eval $(sympa/lb/let di-tous-request@unistra.fr )
 
@@ -36,15 +38,41 @@ test/sympa/list () {
 
     note "lb from the bareword bar"
     sympa/lb bar
+
     test $list = bar ; ok "lb set \$list to $list"
     test -z bot      ; ok "bot is unset"
+
+    local from='
+
+foo/bar:owner
+foo/bar:email foo
+foo/bar:gecos foo dudu
+foo/bar:
+foo/bar:editor
+foo/bar:email bar
+foo/bar:gecos bar tabac
+foo/bar:
+foo/bar:send nothing
+
+'
+
+    expected='foo/bar:owner:email foo
+foo/bar:owner:gecos foo dudu
+foo/bar:editor:email bar
+foo/bar:editor:gecos bar tabac
+foo/bar:send nothing'
+
+    got="$( sympa/config/kv/stream <<<"$from" )"
+
+    is "$got" "$expected" \
+    "sympa/config/kv/stream correct"
 
 }
 
 suite () {
-    test/awk 
-    test/ldap/filter
-    test/sympa/list 
+    prove/awk 
+    prove/ldap/filter
+    prove/sympa
 }
 
 prove suite

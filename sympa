@@ -196,39 +196,7 @@ sympa/config/kv/stream () {
         state $r = "";
         if    (/^.*:\s*$/     ) { $r=""; next }
         elsif (/^.*:(\w+)\s*$/) { $r="$1:" }
-        else  { s/:/:$r/ }
-        print
+        else  { print if s/:/:$r/ }
     '
 }
-
-# prove kvc_works
-kvc_works () {
-
-from='
-
-foo/bar:owner
-foo/bar:email foo
-foo/bar:
-foo/bar:editor
-foo/bar:email bar
-foo/bar:
-foo/bar:send nothing
-
-'
-
-expected='foo/bar:owner
-foo/bar:owner:email foo
-foo/bar:editor
-foo/bar:editor:email bar
-foo/bar:send nothing'
-
-got="$( sympa/config/kv/stream "$from" )"
-is "kvc working" "$from" "$expected"
-
-}
-
-
-
-
-
 
