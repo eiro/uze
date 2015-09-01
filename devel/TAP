@@ -54,6 +54,7 @@ devel/TAP/prove () {
 
     (( ${+with[:plan]} )) && print 1..$with[:plan]
 
+    local got expected
     local _test_tap_index=0
     "$@"
 
