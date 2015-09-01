@@ -83,6 +83,15 @@ devel/TAP/com () { sed 's/^/# /' }
 
 devel/TAP/is () { [[ "$1" == "$2" ]]; devel/TAP/ok "$3" }
 
+# _export_ seems to be a good idea
+# :_oo_methods for objects ?
+
+devel/TAP/_export_ () {
+    typeset -A all; all=( ok prove is note )
+    fns $all
+    tag :all $fns
+}
+
 uzu/devel/TAP () {
     for uzu_tag {
         case $uzu_tag {
