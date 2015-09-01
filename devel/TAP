@@ -95,7 +95,7 @@ devel/TAP/_export_ () {
 uzu/devel/TAP () {
     for uzu_tag {
         case $uzu_tag {
-            (:all) UZU_EXPORT+=( ok prove is note ) ;;
+            (:all) UZU_EXPORT+=( ok prove is note expected ) ;;
             (ok|prove|is|note) UZU_EXPORT+=( $uzu_tag ) ;;
             (*)  warn "invalid tag $uzu_tag while uzu $@"
                 false
@@ -105,3 +105,5 @@ uzu/devel/TAP () {
     }
     true
 }
+
+devel/TAP/expected () { devel/TAP/is "$got" "$expected" "$1" }
