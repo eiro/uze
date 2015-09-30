@@ -117,7 +117,64 @@ or
 =head1 my% and my@ aliases
 
 those are shorter, memorizable aliases for C<typeset -A>
-(local associative array) and C<typeset -a> (local array)
+(local associative array) and C<typeset -a> (local array). 
+
+    Perl                     | zsh                   | uze
+    ------------------------------------------------------------
+    my %foo                  | typeset -A            | my% foo
+    my @bar                  | typeset -a            | my@ bar
+    ref $user                | ${(t)user}            |
+    (ref $user) // 'no more' | ${(t)user-no more}    |
+    exists $user{cpan}       | (( $+user[cpan] ))    |
+
+`my@` is only usefull inside a function to prevent the declaration
+of a global array.
+
+    () {
+        noway=( this is cool )
+        print inside, noway is ${(t)noway-no more}
+    }
+    print outside, noway is ${(t)noway-no more} 
+
+actually does 
+
+    inside, noway is array
+    outside, noway is array
+
+you can throw a warning there using `setopt warncreateglobal` (which is a uze default).
+
+    (anon):1: array parameter noway created globally in function
+
+declaring the array inside the function makes it local so 
+
+    () {
+        my@ noway this is cool 
+        noway=( this is cool )
+        print inside, noway is ${(t)noway-no more}
+    }
+    print outside, noway is ${(t)noway-no more}
+
+works as expected
+
+    inside, noway is array-local
+    outside, noway is no more
+
+complete example using zsh hashes
+
+() {
+    my% user
+    print user is ${(t)user}
+
+    user=(
+        cpan      marcc
+        firstname marc
+        lastname  chantreux
+    )
+
+    (( $+user[cpan] )) &&
+        print "$user[firstname] is a cpan contributor" 
+}
+print user is ${(t)user-no more}
 
 =cut
 
