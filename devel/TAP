@@ -81,7 +81,8 @@ devel/TAP/note () {
 
 devel/TAP/diag () { sed 's/^/# /' }
 
-devel/TAP/is () { [[ "$1" == "$2" ]]; devel/TAP/ok "$3" }
+devel/TAP/is   () { [[ "$1" == "$2" ]];  devel/TAP/ok "$3" }
+devel/TAP/isnt () { ![[ "$1" == "$2" ]]; devel/TAP/ok "$3" }
 
 # _export_ seems to be a good idea
 # :_oo_methods for objects ?
