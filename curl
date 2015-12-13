@@ -13,3 +13,17 @@ curl/tarx () {
     tar x "$@" $tarball
 }
 
+curl/mdtitle () {
+    local url="${1:-it}"
+    local title="$( curl -sL "$url" | grep -Poi '(?<=<title>)[^<]+' )"
+    if ((!?)) { print "[$title]($url)" }
+}
+
+# uzu devel/TAP :all
+# test/suite () {
+#     got="$( url/mdtitle http://www.openbsd.org )"
+#     is "$got" OpenBSD "OpenBSD title found" || note $got
+# }
+# prove test/suite
+
+
