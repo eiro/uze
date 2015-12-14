@@ -178,7 +178,7 @@ print user is ${(t)user-no more}
 
 =cut
 
-setopt warncreateglobal nounset extendedglob braceccl pathdirs
+setopt warncreateglobal nounset extendedglob braceccl pathdirs rcquotes
 
 shush1   () { "$@" 1> /dev/null }
 shush2   () { "$@" 2> /dev/null }
