@@ -195,6 +195,9 @@ apply  () { local it; while {read it} { "$@" $it } }
 epply  () { local it; while {read it} { eval "$@" } }
 pipify () { eval "$1- () {local it; while {read it} { $1 \"\$@\" \$it }}" }
 
+alias ...='warn "Unimplemented in $0 line $LINENO"; return 255'
+
+
 uzu/alias () {
     local uzu_al
     for uzu_al { alias $uzu_al=$uzu_ns/$uzu_al }
