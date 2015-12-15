@@ -222,3 +222,35 @@ uzu () {
     } else { uzu/alias $@ }
 }
 
+uze/pkg/path () {
+    path=( ${(u)path} )
+    __FILE__=($^path/$1.zsh([1]ND))
+}
+
+uze/pkg/do () {
+    local __FILE__
+    uze/pkg/path $1
+    shift
+    "$@"
+}
+
+uze/doc () { uze/pkg/do $1 eval 'perldoc $__FILE__' }
+
+# call a function if declared
+uze/iffn () { (( ${+functions[$1]} )) && "$@" }
+
+uze () {
+    (( +__PACKAGE__ )) && ...
+    local __PACKAGE__=$1 UZE_
+    my@ UZE
+    shift
+    .  $__PACKAGE__.zsh
+    for UZE_
+        uze/iffn uze/import/$__PACKAGE__/$UZE_ ||
+            UZE+=$UZE_
+    for UZE_ ($UZE) { alias $UZE_=$__PACKAGE__/$UZE_ }
+}
+
+alias uze/help='uze/doc ${0%/*}'
+alias uze/pkg='0=${0%.zsh};'
+# alias uze/pkg='uzed_+=$0; 0=${0%.zsh};'
