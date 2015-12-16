@@ -1,4 +1,4 @@
-. uze/curl
+uze curl
 
 renater/IPDs/url () 
     https://services-federation.renater.fr/metadata/renater-test-metadata.xml 

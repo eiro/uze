@@ -10,7 +10,7 @@ those are the lines you need to run before using the API (for exemple, by
 sourcing them from C<.zshenv>).
 
     typeset -A SYMPARC
-    . uze/sympa
+    uze sympa
     SYMPARC=(
        arc_path $( sympa/rc/get arc_path /etc/sympa/wwsympa.conf )
        queueoutgoing $( sympa/rc/get queueoutgoing /etc/sympa/sympa.conf )

@@ -9,7 +9,7 @@
 
 # example from my ~/.zshenv: 
 # > hash -d p5=~/src/perl/5/lib
-# > . uze/p5/env
+# > uze p5/env
 # > p5/env/dev
 
 # so now i can 

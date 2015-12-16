@@ -1,4 +1,4 @@
-. uze/it
+uze it
 
 curl/poke () { shush curl -fs --connect-timeout 1 ${1:-${REPLY:?no parameter supplied}} }
 curl/say/poke () {

@@ -6,7 +6,7 @@
 
 wraps awk with named fields
 
-    . uze/awk
+    uze awk
     awk/new apwd login pwd uid gid gecos home shell -- -F: 
     getent passwd | apwd '$login == "root" { print $shell }'
 

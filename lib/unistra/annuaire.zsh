@@ -21,7 +21,7 @@ unistra/annuaire/cards p marc m chant
 
 =cut
 
-. uze/lynx
+uze lynx
 
 function () {
     local m=$1

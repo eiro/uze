@@ -9,7 +9,7 @@
 
 see the output at the end of the section
 
-    . uze/devel/TAP
+    uze devel/TAP
 
     # alias
     for REPLY (note ok prove)

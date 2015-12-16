@@ -1,7 +1,7 @@
-uzu devel/TAP :all 
-uzu awk
-uzu ldap
-uzu sympa
+uze devel/TAP :all 
+uze awk
+uze ldap
+uze sympa
 
 got= expected= m=
 
