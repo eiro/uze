@@ -234,7 +234,8 @@ uze/pkg/do () {
     "$@"
 }
 
-uze/doc () { uze/pkg/do $1 eval 'perldoc $__FILE__' }
+uze/doc    () { uze/pkg/do $1 eval "perldoc ${@[2,-1]} \$__FILE__" }
+uze/doc/md () { uze/doc $1 -o Markdown }
 
 # call a function if declared
 uze/iffn () { (( ${+functions[$1]} )) && "$@" }
