@@ -4,3 +4,6 @@ whence/readlink () {
         sed  -rn 's/(.*): command$/readlink -e =\1/p'
     )
 }
+
+whence/ls () { whence -wam "$@" | sed 's/: *//' }
+
