@@ -3,24 +3,11 @@ uze awk
 uze ldap
 uze sympa
 
-got= expected= m=
-
 prove/awk () {
     awk/new lol go to hell -- -F'[\\\\ ]'
     got=$( lol '{ print $to }' <<< 'go to\hell' )
     is $got to \
     "awk/new working"
-}
-
-prove/ldap/filter () {
-    m=ldap/filter
-    got=$( $m/minify <<< "
-        (| (uid=a)
-           (uid=b))" )
-    expected="(|(uid=a)(uid=b))"
-    is "$got" "$expected"       \
-    "ldap minification working" ||
-        note "ldap/filter $got"
 }
 
 prove/sympa () {
@@ -71,7 +58,6 @@ foo/bar:send nothing'
 
 suite () {
     prove/awk 
-    prove/ldap/filter
     prove/sympa
 }
 
