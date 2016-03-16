@@ -5,5 +5,5 @@ whence/readlink () {
     )
 }
 
-whence/ls () { whence -wam "$@" | sed 's/: *//' }
+whence/ls () { whence -wam "$@" | sed 's/: */ /' }
 
