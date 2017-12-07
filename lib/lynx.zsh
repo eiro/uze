@@ -3,4 +3,4 @@ lynx/dump () {
     shift
     for k v { url="$url&$k=$v" }
     lynx -dump "$url"
-} 
+}

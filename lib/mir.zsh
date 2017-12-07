@@ -9,8 +9,8 @@
 is a sed alike filter for ISO2709 based on the perl MARC::MIR library. the first
 element is a script that can use functions with 1 letter shortcuts
 
-    r transform the C<$_> from raw to MIR structure (C<from_iso2709>) 
-    h returns a human readable dump of $_ (C<for_humans>) 
+    r transform the C<$_> from raw to MIR structure (C<from_iso2709>)
+    h returns a human readable dump of $_ (C<for_humans>)
 
 =head3 mir/dump
 

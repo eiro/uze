@@ -1,11 +1,11 @@
 
 # prove ldap_filters
 # l=ldap/filter
-# $l/or mail= toto tata tutu 
+# $l/or mail= toto tata tutu
 # $l/or '' mail=toto uid=toto
 
 uze devel/TAP :all
- 
+
 ldap_filters () {
     local l=ldap/filter
     got="$( seq 3 | $l/or- mail= )"
@@ -26,7 +26,7 @@ ldap_filters () {
     expected="(|(uid=a)(uid=b))"
     is "$got" "$expected"       \
     "ldap minification working" ||
-        note "ldap/filter $got" 
+        note "ldap/filter $got"
 
 
 }

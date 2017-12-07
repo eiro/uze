@@ -8,15 +8,15 @@ transform human readable version of an ldap query to a program readable one by
 removing all extra spaces and line returns. so
 
     (| (uid=a)
-       (uid=b)) 
+       (uid=b))
 
-is minified as 
+is minified as
 
     (|(uid=a)(uid=b))
 
 =head2 oneOf
 
-prepare 
+prepare
     (|(uid=a)(uid=b))
 
 =cut
@@ -29,7 +29,7 @@ ldap/filter/minify () {
             ^ (?&ws_or_eol)
             | (?&ws_or_eol) $
         //xmsg;
-        say Net::LDAP::Filter 
+        say Net::LDAP::Filter
         -> new( $_ )
         -> as_string
     ' "$@"

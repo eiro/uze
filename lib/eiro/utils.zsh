@@ -35,9 +35,9 @@ dot2 () {
         # todo: add all supported formats
         [[ $format == (sv|pn)g ]] || {
             print -u2 invalid output format $format
-            return 1 
+            return 1
         }
-        dot "$@" -T$format -o $f:t:r.$format $f 
+        dot "$@" -T$format -o $f:t:r.$format $f
     } elif (( $+1 )) {
         local file=$1
         shift

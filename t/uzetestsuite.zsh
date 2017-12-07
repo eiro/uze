@@ -1,4 +1,4 @@
-uze devel/TAP :all 
+uze devel/TAP :all
 uze awk
 uze ldap
 uze sympa
@@ -57,7 +57,7 @@ foo/bar:send nothing'
 }
 
 suite () {
-    prove/awk 
+    prove/awk
     prove/sympa
 }
 

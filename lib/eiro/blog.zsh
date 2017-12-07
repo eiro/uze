@@ -7,7 +7,7 @@ posts directories of eiro.github.io.
 
 =cut
 
-eiro/blog/entry () { 
+eiro/blog/entry () {
     local title
     [[ -n $argv ]] &&
         title="$*" ||

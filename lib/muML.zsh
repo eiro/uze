@@ -5,7 +5,7 @@
 when the first bareword of each lines is an email adress, everything else is up
 to you.
 
-so it can be a contact list, a list of data for a template placeholder, ...  
+so it can be a contact list, a list of data for a template placeholder, ...
 
 =head2 T_/to
 
@@ -17,7 +17,7 @@ muML/T_/to () {
     sed '
         s/$/,/
         s/^/  /
-        1s/^  /To: / 
+        1s/^  /To: /
         # $s/,$// # as it seems useless?
     ' "$@"
 }

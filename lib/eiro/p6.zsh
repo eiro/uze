@@ -5,4 +5,4 @@ p6_reload_lib () {
     perl6lib=( lib ~p6/*/lib(N) $perl6lib )
     path=( ~p6/*/{bin,script{,s}}(N) $path )
 }
-p6_reload_lib 
+p6_reload_lib

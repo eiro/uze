@@ -29,11 +29,11 @@ it will keep existing variables untouched
 
 =head3 examples
 
-    # some potential new places 
+    # some potential new places
     env/home GOPATH        ~/local/opt/go
     env/home GROOVY_HOME   ~/local/opt/groovy
     env/home GRAILS_HOME   ~/local/opt/grails
-    env/home GEM_HOME      ~/local/lib/gems 
+    env/home GEM_HOME      ~/local/lib/gems
     env/home PINTO_HOME    ~/local/opt/pinto
 
 =cut
@@ -47,6 +47,6 @@ env/home () {
     # don't update env if there is no dir
     [[ -d $dir ]] || return
     eval "export $var=${(qq)dir}"
-    [[ -d $dir/bin ]] && path=( $dir/bin $path ) 
+    [[ -d $dir/bin ]] && path=( $dir/bin $path )
     true
 }

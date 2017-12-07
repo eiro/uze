@@ -21,7 +21,7 @@ to create a new session 'foo':
 
 tmux/simple () {
     (( $+1 )) ||
-        {tmux ls -F '#S'; return} 
+        {tmux ls -F '#S'; return}
     shush tmux att -t $1 ||
         tmux new -s $1
 }

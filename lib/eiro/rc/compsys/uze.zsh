@@ -1,4 +1,4 @@
-# completion  
+# completion
 
 _expand_command() { _expand_word || _autocd }
 compdef _expand_command -command-

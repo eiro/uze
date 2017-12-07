@@ -1,6 +1,6 @@
 cpan/local-shell () { perl -Mlocal::lib -MCPAN -wEshell }
 
-cpan/distro-from-module-name () { 
+cpan/distro-from-module-name () {
     perl -MCPAN -wsne '
 	BEGIN {
 	    $CPAN::Frontend = q(Z);
@@ -10,7 +10,7 @@ cpan/distro-from-module-name () {
 		\. (?:
 		    tar.gz
 		    tgz
-		) $ 
+		) $
 	    }x;
 	}
 	chomp;

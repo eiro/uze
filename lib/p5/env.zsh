@@ -7,15 +7,15 @@
 
 # p5/env/local to load the default local::lib env
 
-# example from my ~/.zshenv: 
+# example from my ~/.zshenv:
 # > hash -d p5=~/src/perl/5/lib
 # > uze p5/env
 # > p5/env/dev
 
-# so now i can 
+# so now i can
 
 # > cd ~p5
-# > git clone git@github.com:eiro/p5-perlude.git perlude 
+# > git clone git@github.com:eiro/p5-perlude.git perlude
 #
 # et voilà! libs as well as commands are available
 
